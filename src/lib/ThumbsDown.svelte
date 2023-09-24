@@ -1,4 +1,14 @@
-<button class="button">
+<script>
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
+
+	function buttonClicked() {
+		dispatch("click");
+	}
+</script>
+
+<button class="button" on:click={buttonClicked}>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width="12rem"
