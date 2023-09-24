@@ -1,4 +1,4 @@
-export const pizzas = [
+export const pizzaList = [
 	{
 		image: "pizzas/pepperoni pizza.png",
 		name: "Pepperoni Pizza",

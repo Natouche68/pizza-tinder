@@ -2,23 +2,52 @@
 	import { onMount } from "svelte";
 	import ThumbsDown from "./lib/ThumbsDown.svelte";
 	import Heart from "./lib/Heart.svelte";
-	import { pizzas } from "./lib/pizzas.js";
+	import { pizzaList } from "./lib/pizzas.js";
 
 	let currentPizza = {
 		name: "",
 		image: "",
 	};
 
+	let pizzas = pizzaList;
+	let lovedPizzas = [];
+
 	onMount(() => {
-		currentPizza = pizzas[Math.floor(Math.random() * pizzas.length)];
+		showPizza();
 	});
 
+	function showPizza() {
+		currentPizza = pizzas[Math.floor(Math.random() * pizzas.length)];
+	}
+
 	function thumbsDownClicked() {
-		console.log("thumbs down clicked");
+		let indexToRemove = pizzas.findIndex((pizza) => {
+			return pizza.name === currentPizza.name;
+		});
+		pizzas.splice(indexToRemove, 1);
+
+		if (pizzas.length == 0) {
+			pizzas = structuredClone(lovedPizzas);
+			lovedPizzas = [];
+		}
+
+		showPizza();
 	}
 
 	function loveClicked() {
-		console.log("love clicked");
+		let indexToRemove = pizzas.findIndex((pizza) => {
+			return pizza.name === currentPizza.name;
+		});
+
+		lovedPizzas.push(pizzas[indexToRemove]);
+		pizzas.splice(indexToRemove, 1);
+
+		if (pizzas.length == 0) {
+			pizzas = structuredClone(lovedPizzas);
+			lovedPizzas = [];
+		}
+
+		showPizza();
 	}
 </script>
 
