@@ -4,6 +4,8 @@
 	import Heart from "./lib/Heart.svelte";
 	import { pizzaList } from "./lib/pizzas.js";
 
+	const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
+
 	let currentPizza = {
 		name: "",
 		image: "",
@@ -11,16 +13,32 @@
 
 	let pizzas = pizzaList;
 	let lovedPizzas = [];
+	let showingPizza = true;
+	let appearing = true;
+	let bad = false;
+	let loved = false;
 
-	onMount(() => {
-		showPizza();
+	onMount(async () => {
+		await showPizza();
 	});
 
-	function showPizza() {
+	async function showPizza() {
+		await sleep(400);
+
+		bad = false;
+		loved = false;
+		appearing = true;
+
 		currentPizza = pizzas[Math.floor(Math.random() * pizzas.length)];
+
+		await sleep(400);
+
+		appearing = false;
 	}
 
-	function thumbsDownClicked() {
+	async function thumbsDownClicked() {
+		bad = true;
+
 		let indexToRemove = pizzas.findIndex((pizza) => {
 			return pizza.name === currentPizza.name;
 		});
@@ -31,10 +49,12 @@
 			lovedPizzas = [];
 		}
 
-		showPizza();
+		await showPizza();
 	}
 
-	function loveClicked() {
+	async function loveClicked() {
+		loved = true;
+
 		let indexToRemove = pizzas.findIndex((pizza) => {
 			return pizza.name === currentPizza.name;
 		});
@@ -47,7 +67,7 @@
 			lovedPizzas = [];
 		}
 
-		showPizza();
+		await showPizza();
 	}
 </script>
 
@@ -55,7 +75,16 @@
 
 <div class="app">
 	<ThumbsDown on:click={thumbsDownClicked} />
-	<img src={currentPizza.image} alt={currentPizza.name} class="pizza" />
+	{#if showingPizza}
+		<img
+			src={currentPizza.image}
+			alt={currentPizza.name}
+			class="pizza"
+			class:appearing
+			class:bad
+			class:loved
+		/>
+	{/if}
 	<Heart on:click={loveClicked} />
 </div>
 
@@ -80,5 +109,21 @@
 		aspect-ratio: 1 / 1;
 		height: 80vh;
 		border-radius: 4rem;
+		transition: all 0.4s ease;
+	}
+
+	.pizza.appearing {
+		opacity: 0;
+		transform: scale(0.1);
+	}
+
+	.pizza.bad {
+		opacity: 0;
+		transform: translateX(-48rem) scale(0.1);
+	}
+
+	.pizza.loved {
+		opacity: 0;
+		transform: translateX(48rem) scale(0.1);
 	}
 </style>
