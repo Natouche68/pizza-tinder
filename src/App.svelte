@@ -8,8 +8,8 @@
 	const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 	let currentPizza = {
-		name: "Pepperoni Pizza",
-		image: "pizzas/pepperoni pizza.png",
+		name: "",
+		image: "",
 	};
 
 	let pizzas = pizzaList;
@@ -21,11 +21,18 @@
 
 	let message = "Round 1";
 	let currentRound = 1;
+	let isMessageAppearing = false;
 
-	let hasWinner = true;
+	let hasWinner = false;
 
 	onMount(async () => {
-		await sleep(1200);
+		await sleep(800);
+
+		isMessageAppearing = true;
+
+		await sleep(400);
+
+		isMessageAppearing = false;
 
 		showingPizza = true;
 
@@ -92,11 +99,25 @@
 		currentRound++;
 		message = `Round ${currentRound}`;
 
+		showMessage();
+	}
+
+	async function showMessage() {
+		isMessageAppearing = true;
 		showingPizza = false;
+
+		await sleep(400);
+
+		isMessageAppearing = false;
 
 		await sleep(1200);
 
+		isMessageAppearing = true;
+
+		await sleep(400);
+
 		showingPizza = true;
+		isMessageAppearing = false;
 	}
 </script>
 
@@ -117,7 +138,7 @@
 				class:loved
 			/>
 		{:else}
-			<div class="message">
+			<div class="message" class:appearing={isMessageAppearing}>
 				{message}
 			</div>
 		{/if}
@@ -172,5 +193,13 @@
 		align-items: center;
 		font-size: 8rem;
 		font-weight: 600;
+		opacity: 1;
+		transform: scale(1) translateY(0);
+		transition: all 0.4s ease;
+	}
+
+	.message.appearing {
+		opacity: 0;
+		transform: scale(0.1) translateY(-16rem);
 	}
 </style>
