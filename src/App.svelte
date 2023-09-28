@@ -2,13 +2,14 @@
 	import { onMount } from "svelte";
 	import ThumbsDown from "./lib/ThumbsDown.svelte";
 	import Heart from "./lib/Heart.svelte";
+	import WinnerCard from "./lib/WinnerCard.svelte";
 	import { pizzaList } from "./lib/pizzas.js";
 
 	const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 	let currentPizza = {
-		name: "",
-		image: "",
+		name: "Pepperoni Pizza",
+		image: "pizzas/pepperoni pizza.png",
 	};
 
 	let pizzas = pizzaList;
@@ -21,7 +22,7 @@
 	let message = "Round 1";
 	let currentRound = 1;
 
-	let hasWinner = false;
+	let hasWinner = true;
 
 	onMount(async () => {
 		await sleep(1200);
@@ -102,33 +103,33 @@
 <h1>Pizza Tinder</h1>
 
 <div class="app">
-	<ThumbsDown on:click={thumbsDownClicked} />
 	{#if hasWinner}
-		<div class="message">
-			The winner is {currentPizza.name}
-		</div>
-	{:else if showingPizza}
-		<img
-			src={currentPizza.image}
-			alt={currentPizza.name}
-			class="pizza"
-			class:appearing
-			class:bad
-			class:loved
-		/>
+		<WinnerCard pizzaName={currentPizza.name} imagePath={currentPizza.image} />
 	{:else}
-		<div class="message">
-			{message}
-		</div>
+		<ThumbsDown on:click={thumbsDownClicked} />
+		{#if showingPizza}
+			<img
+				src={currentPizza.image}
+				alt={currentPizza.name}
+				class="pizza"
+				class:appearing
+				class:bad
+				class:loved
+			/>
+		{:else}
+			<div class="message">
+				{message}
+			</div>
+		{/if}
+		<Heart on:click={loveClicked} />
 	{/if}
-	<Heart on:click={loveClicked} />
 </div>
 
 <style>
 	h1 {
 		width: 90%;
 		margin: 3rem 5%;
-		border-bottom: solid 1px var(--discret-color);
+		border-bottom: solid 1px var(--separation-color);
 		text-align: center;
 		font-weight: 700;
 		font-size: 4rem;
