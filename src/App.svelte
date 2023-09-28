@@ -13,12 +13,21 @@
 
 	let pizzas = pizzaList;
 	let lovedPizzas = [];
-	let showingPizza = true;
+	let showingPizza = false;
 	let appearing = true;
 	let bad = false;
 	let loved = false;
 
+	let message = "Round 1";
+	let currentRound = 1;
+
+	let hasWinner = false;
+
 	onMount(async () => {
+		await sleep(1200);
+
+		showingPizza = true;
+
 		await showPizza();
 	});
 
@@ -45,8 +54,7 @@
 		pizzas.splice(indexToRemove, 1);
 
 		if (pizzas.length == 0) {
-			pizzas = structuredClone(lovedPizzas);
-			lovedPizzas = [];
+			await newRound();
 		}
 
 		await showPizza();
@@ -63,11 +71,31 @@
 		pizzas.splice(indexToRemove, 1);
 
 		if (pizzas.length == 0) {
-			pizzas = structuredClone(lovedPizzas);
-			lovedPizzas = [];
+			await newRound();
 		}
 
 		await showPizza();
+	}
+
+	async function newRound() {
+		await sleep(400);
+
+		pizzas = structuredClone(lovedPizzas);
+		lovedPizzas = [];
+
+		if (pizzas.length == 1) {
+			hasWinner = true;
+			currentPizza = pizzas[0];
+		}
+
+		currentRound++;
+		message = `Round ${currentRound}`;
+
+		showingPizza = false;
+
+		await sleep(1200);
+
+		showingPizza = true;
 	}
 </script>
 
@@ -75,7 +103,11 @@
 
 <div class="app">
 	<ThumbsDown on:click={thumbsDownClicked} />
-	{#if showingPizza}
+	{#if hasWinner}
+		<div class="message">
+			The winner is {currentPizza.name}
+		</div>
+	{:else if showingPizza}
 		<img
 			src={currentPizza.image}
 			alt={currentPizza.name}
@@ -84,6 +116,10 @@
 			class:bad
 			class:loved
 		/>
+	{:else}
+		<div class="message">
+			{message}
+		</div>
 	{/if}
 	<Heart on:click={loveClicked} />
 </div>
@@ -125,5 +161,15 @@
 	.pizza.loved {
 		opacity: 0;
 		transform: translateX(48rem) scale(0.1);
+	}
+
+	.message {
+		height: 80vh;
+		width: 80vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 8rem;
+		font-weight: 600;
 	}
 </style>
