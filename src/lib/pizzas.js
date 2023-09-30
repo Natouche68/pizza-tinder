@@ -47,4 +47,28 @@ export const pizzaList = [
 		image: "pizzas/spicy pizza.png",
 		name: "Spicy Pizza",
 	},
+	{
+		image: "pizzas/honey goat cheese pizza.png",
+		name: "Honey Goat Cheese Pizza",
+	},
+	{
+		image: "pizzas/shrimp pizza.png",
+		name: "Shrimp Pizza",
+	},
+	{
+		image: "pizzas/chicken pizza.png",
+		name: "Chicken Pizza",
+	},
+	{
+		image: "pizzas/spaghetti pizza.png",
+		name: "Spaghetti Pizza",
+	},
+	{
+		image: "pizzas/salad pizza.png",
+		name: "Salad Pizza",
+	},
+	{
+		image: "pizzas/pizza burger.png",
+		name: "Pizza Burger",
+	},
 ];
