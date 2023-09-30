@@ -62,7 +62,7 @@
 		pizzas.splice(indexToRemove, 1);
 
 		if (pizzas.length == 0) {
-			await newRound();
+			newRound();
 		}
 
 		await showPizza();
@@ -79,7 +79,7 @@
 		pizzas.splice(indexToRemove, 1);
 
 		if (pizzas.length == 0) {
-			await newRound();
+			newRound();
 		}
 
 		await showPizza();
@@ -110,7 +110,7 @@
 
 		isMessageAppearing = false;
 
-		await sleep(1200);
+		await sleep(2800);
 
 		isMessageAppearing = true;
 
@@ -139,7 +139,16 @@
 			/>
 		{:else}
 			<div class="message" class:appearing={isMessageAppearing}>
-				{message}
+				<div>
+					{message}
+				</div>
+				{#if currentRound != 1}
+					<div class="thumbnails">
+						{#each pizzas as pizza}
+							<img src={pizza.image} alt={pizza.name} />
+						{/each}
+					</div>
+				{/if}
 			</div>
 		{/if}
 		<Heart on:click={loveClicked} />
@@ -189,6 +198,7 @@
 		height: 80vh;
 		width: 80vh;
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		font-size: 8rem;
@@ -201,5 +211,21 @@
 	.message.appearing {
 		opacity: 0;
 		transform: scale(0.1) translateY(-16rem);
+	}
+
+	.thumbnails {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		flex-wrap: wrap;
+		width: 80%;
+	}
+
+	.thumbnails img {
+		margin-top: 2rem;
+		aspect-ratio: 1 / 1;
+		width: 12rem;
+		border-radius: 2rem;
 	}
 </style>
